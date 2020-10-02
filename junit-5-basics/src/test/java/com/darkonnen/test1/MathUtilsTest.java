@@ -13,10 +13,11 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.RepeatedTest;
-import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestReporter;
 import org.junit.jupiter.api.condition.EnabledOnOs;
 import org.junit.jupiter.api.condition.OS;
 
@@ -29,6 +30,8 @@ class MathUtilsTest {
 //	int cachedValue = 0; // -> Bad code pattern
 
 	MathUtils mathUtils;
+	TestInfo testInfo;
+	TestReporter testReporter;
 	
 	@BeforeAll
 	static void beforeAllinit() { // HAS TO BE A STATIC METHOD
@@ -36,8 +39,11 @@ class MathUtilsTest {
 	}
 
 	@BeforeEach
-	void init() {
+	void init(TestInfo testInfo, TestReporter testReporter) {
+		this.testInfo = testInfo;
+		this.testReporter = testReporter;
 		mathUtils = new MathUtils();
+		testReporter.publishEntry("Running " + testInfo.getDisplayName() + " with tags " + testInfo.getTags());		
 	}
 	
 	@AfterEach
@@ -105,7 +111,8 @@ class MathUtilsTest {
 	@Tag("Circle")
 //	void testComputeCircleRadius(RepetitionInfo repetitionInfo) {
 	void testComputeCircleRadius() {
-	
+//		System.out.println("Running " + testInfo.getDisplayName() + " with tags " + testInfo.getTags());
+//		testReporter.publishEntry("Running " + testInfo.getDisplayName() + " with tags " + testInfo.getTags());
 		boolean isServerUp = false;
 		assumeTrue(isServerUp); // When run, assume that is true|false
 //		MathUtils mathUtils = new MathUtils();
